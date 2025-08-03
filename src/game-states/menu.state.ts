@@ -25,12 +25,12 @@ class MenuState implements State {
       if (this.isStartSelected) {
         gameStateMachine.setState(gameState);
       } else {
-        this.toggleFullscreen();
+        MenuState.toggleFullscreen();
       }
     }
   }
 
-  toggleFullscreen() {
+  static toggleFullscreen() {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen();
     } else {
