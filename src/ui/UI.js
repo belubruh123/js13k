@@ -15,7 +15,7 @@ export class UI{
     c.strokeStyle='#FFF';
     c.strokeRect(x+0.5,y+0.5,w-1,h-1);
     c.fillStyle='#DDD';
-    c.font='8px monospace';
+    c.font='10px monospace';
     c.textBaseline='middle';
     c.textAlign='center';
     c.fillText(label, x+w/2, y+h/2);

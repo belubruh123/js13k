@@ -12,4 +12,5 @@ body {
   outline: none;
   cursor: crosshair;
   background: #000;
+  image-rendering: pixelated;
 }

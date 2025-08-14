@@ -14,13 +14,16 @@ export class State_ROOM{
   }
   render(){ const r=this.g.renderer; const c=r.ctx; r.begin(); this.room.draw(); this.cat.draw(c); r.vignette(0.7);
     // UI
-    if(this.ui.button(10,4,40,12,'Feed')){ this.cat.feed(); if(this.cat.full>0.9){ this.bumpGlitch(0.1); } this.g.audio.blip(500,0.05); }
-    if(this.ui.button(60,4,40,12,'Pet')){ this.cat.pet(); if(this.lastAction<0.4){ this.bumpGlitch(0.05);} this.g.audio.blip(600,0.05); this.lastAction=0; }
-    if(this.ui.button(110,4,40,12,'Toy')){ this.cat.toy(); this.g.audio.blip(700,0.05); }
+    if(this.ui.button(10,4,60,20,'Feed')){ this.cat.feed(); if(this.cat.full>0.9){ this.bumpGlitch(0.1); } this.g.audio.blip(500,0.05); }
+    if(this.ui.button(80,4,60,20,'Pet')){ this.cat.pet(); if(this.lastAction<0.4){ this.bumpGlitch(0.05);} this.g.audio.blip(600,0.05); this.lastAction=0; }
+    if(this.ui.button(150,4,60,20,'Toy')){ this.cat.toy(); this.g.audio.blip(700,0.05); }
     // bars
-    this._bar(10,20,'Happy',this.cat.happy); this._bar(10,30,'Full',this.cat.full); this._bar(10,40,'Play',this.cat.play);
+    this._bar(10,34,'Happy',this.cat.happy); this._bar(10,46,'Full',this.cat.full); this._bar(10,58,'Play',this.cat.play);
     // glitch meter
-    this._bar(10,60,'GLITCH',this.glitch, true);
+    this._bar(10,78,'GLITCH',this.glitch, true);
+
+    // instructions
+    c.fillStyle='#BBB'; c.font='10px monospace'; c.fillText('Use buttons to care for your cat.', 10, 170);
 
     if(this.glitch>0.5){ this.fx.draw('WHO IS REAL', 170, 10, '#F33', 1); }
     if(this.glitch>0.7){ this.fx.crawl('LET ME OUT', c.canvas); }
@@ -33,5 +36,5 @@ export class State_ROOM{
   }
   _hot(x,y,w,h){ const i=this.g.input; return i.mx>=x&&i.mx<=x+w&&i.my>=y&&i.my<=y+h; }
   _click(){ if(this.g.input.click){ this.g.input.click=false; return true; } return false; }
-  _bar(x,y,label,val,red=false){ const c=this.g.renderer.ctx; c.fillStyle='#111'; c.fillRect(x,y,80,6); c.fillStyle= red?'#700':'#0A0'; let v=val; if(this.glitch>0.6 && label!=='GLITCH') v = Math.min(1, v+0.01); c.fillRect(x,y,80*v,6); c.fillStyle='#AAA'; c.fillText(label, x+85, y-1); }
+  _bar(x,y,label,val,red=false){ const c=this.g.renderer.ctx; c.fillStyle='#111'; c.fillRect(x,y,80,6); c.fillStyle= red?'#700':'#0A0'; let v=val; if(this.glitch>0.6 && label!=='GLITCH') v = Math.min(1, v+0.01); c.fillRect(x,y,80*v,6); c.fillStyle='#AAA'; c.font='8px monospace'; c.fillText(label, x+85, y-1); }
 }
