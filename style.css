@@ -2,9 +2,14 @@
 :root { color-scheme: dark; }
 * { box-sizing: border-box; }
 html, body { height: 100%; margin: 0; background: #000; }
-body { display: grid; place-items: center; }
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
 #game {
-  image-rendering: pixelated; /* nearest-neighbor upscale */
-  outline: none; cursor: crosshair;
+  outline: none;
+  cursor: crosshair;
   background: #000;
 }

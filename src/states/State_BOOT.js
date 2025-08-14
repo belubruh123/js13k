@@ -1,9 +1,9 @@
 /** @module states/State_BOOT */
-import { CONST } from '../util/constants.js';
+import { UI } from '../ui/UI.js';
 export class State_BOOT{
   /** @param {import('../core/Game.js').Game} game */
-  constructor(game){ this.g=game; this.t=0; }
-  enter(){ this.t=0; }
-  update(dt){ this.t+=dt; if(this.t>2){ this.g.goto('WARNING'); } }
-  render(){ const r=this.g.renderer; r.begin(); r.fill('#000'); const c=r.ctx; c.fillStyle='#AAA'; c.font='10px monospace'; c.fillText('Pet Simulator', 100, 80); c.fillText('© 2025', 128, 95); r.end(); }
+  constructor(game){ this.g=game; this.ui=new UI(game.renderer.ctx); }
+  enter(){}
+  update(dt){ if(this.ui.button(110,100,100,20,'Start')){ this.g.audio.blip(); this.g.goto('WARNING'); } }
+  render(){ const r=this.g.renderer; r.begin(); r.fill('#000'); const c=r.ctx; c.fillStyle='#AAA'; c.font='10px monospace'; c.fillText('Pet Simulator', 100, 60); c.fillText('Feed, Pet and Play to keep it calm.', 40, 80); c.fillText('© 2025', 128, 150); r.end(); }
 }

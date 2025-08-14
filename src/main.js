@@ -16,6 +16,17 @@ import { CONST } from './util/constants.js';
 // Bootstrap
 const canvas = /** @type {HTMLCanvasElement} */(document.getElementById('game'));
 const renderer = new Renderer(canvas, CONST.WIDTH, CONST.HEIGHT);
+
+function fitCanvas(){
+  const ratio = CONST.WIDTH/CONST.HEIGHT;
+  let w = window.innerWidth;
+  let h = window.innerHeight;
+  if(w/h > ratio){ w = h * ratio; } else { h = w / ratio; }
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+}
+window.addEventListener('resize', fitCanvas);
+fitCanvas();
 const audio = new AudioEngine();
 const effects = new EffectsController(renderer, audio);
 const timers = new Timer();

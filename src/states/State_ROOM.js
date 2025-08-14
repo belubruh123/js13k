@@ -2,8 +2,9 @@
 import { Room } from '../world/Room.js';
 import { Cat } from '../world/Cat.js';
 import { TextFX } from '../gfx/TextFX.js';
+import { UI } from '../ui/UI.js';
 export class State_ROOM{
-  constructor(g){ this.g=g; this.room=new Room(g.renderer.ctx); this.cat=new Cat(); this.fx=new TextFX(g.renderer.ctx); this.glitch=0; this.petHold=0; this.lastAction=0; }
+  constructor(g){ this.g=g; this.room=new Room(g.renderer.ctx); this.cat=new Cat(); this.fx=new TextFX(g.renderer.ctx); this.ui=new UI(g.renderer.ctx); this.glitch=0; this.petHold=0; this.lastAction=0; }
   enter(){ this.g.audio.grains(); this.g.audio.purr(true); }
   exit(){ this.g.audio.stopBed('grains'); this.g.audio.purr(false); this.g.audio.hum(false); }
   update(dt){ this.g.effects.tick(dt); this.cat.tick(dt); this.fx.tick(dt); this.lastAction+=dt; if(this.g.input.down){ this.petHold+=dt; if(this.petHold>2){ this.glitch = Math.min(1, this.glitch+0.15); this.g.audio.hiss(0.2); this.petHold=0; } } else { this.petHold=0; }
@@ -13,10 +14,9 @@ export class State_ROOM{
   }
   render(){ const r=this.g.renderer; const c=r.ctx; r.begin(); this.room.draw(); this.cat.draw(c); r.vignette(0.7);
     // UI
-    c.fillStyle='#BBB'; c.fillText('Feed', 10, 8); c.fillText('Pet', 60, 8); c.fillText('Toy', 100, 8);
-    if(this._hot(8,6,30,10) && this._click()){ this.cat.feed(); if(this.cat.full>0.9){ this.bumpGlitch(0.1); } this.g.audio.blip(500,0.05); }
-    if(this._hot(58,6,30,10) && this._click()){ this.cat.pet(); if(this.lastAction<0.4){ this.bumpGlitch(0.05);} this.g.audio.blip(600,0.05); this.lastAction=0; }
-    if(this._hot(98,6,30,10) && this._click()){ this.cat.toy(); this.g.audio.blip(700,0.05); }
+    if(this.ui.button(10,4,40,12,'Feed')){ this.cat.feed(); if(this.cat.full>0.9){ this.bumpGlitch(0.1); } this.g.audio.blip(500,0.05); }
+    if(this.ui.button(60,4,40,12,'Pet')){ this.cat.pet(); if(this.lastAction<0.4){ this.bumpGlitch(0.05);} this.g.audio.blip(600,0.05); this.lastAction=0; }
+    if(this.ui.button(110,4,40,12,'Toy')){ this.cat.toy(); this.g.audio.blip(700,0.05); }
     // bars
     this._bar(10,20,'Happy',this.cat.happy); this._bar(10,30,'Full',this.cat.full); this._bar(10,40,'Play',this.cat.play);
     // glitch meter
