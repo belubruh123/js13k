@@ -1,0 +1,10 @@
+/* Centers the canvas, black background, crisp pixels, custom cursor */
+:root { color-scheme: dark; }
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; background: #000; }
+body { display: grid; place-items: center; }
+#game {
+  image-rendering: pixelated; /* nearest-neighbor upscale */
+  outline: none; cursor: crosshair;
+  background: #000;
+}
