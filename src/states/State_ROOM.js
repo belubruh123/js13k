@@ -32,7 +32,10 @@ export class State_ROOM{
     this.kill=false; this.killTimer=0;
     this.horror=false; this.overlay=0;
     this.shakeTimer=0;
+    this.jsTimer=0; this.jsActive=0; this.jsMsg='';
+    this.jsMsgs=['I SEE YOU',"YOU'RE TOO SLOW",'I AM GOD'];
     this.softlock=false;
+    this.glitchTimer=0;
   }
   enter(){
     this.t=0; this.chatIndex=0; this.chatTimer=0; this.dialog.show(this.chat[0]);
@@ -41,7 +44,8 @@ export class State_ROOM{
     this.room.setDoor(0); this.room.setHorror(false);
     this.g.audio.grains();
     this.g.audio.purr(true);
-    this.softlock=false;
+    this.jsTimer=5+Math.random()*10; this.jsActive=0; this.jsMsg='';
+    this.softlock=false; this.glitchTimer=3+Math.random()*4;
   }
   exit(){ this.g.audio.stopBed('grains'); this.g.audio.purr(false); }
   update(dt){
@@ -58,6 +62,16 @@ export class State_ROOM{
       return;
     }
     if(this.softlock) return;
+    if(this.jsActive>0) this.jsActive=Math.max(0,this.jsActive-dt);
+    this.jsTimer-=dt;
+    if(this.jsTimer<=0 && this.g.effects.canJumpscare()){
+      this.jsActive=0.8; this.shakeTimer=1;
+      this.jsMsg=this.jsMsgs[(Math.random()*this.jsMsgs.length)|0];
+      this.g.effects.flash(); this.g.effects.glitch(); this.g.audio.sting(1); this.g.audio.staticBurst(); this.g.effects.markJumpscare();
+      this.jsTimer=8+Math.random()*12;
+    }
+    this.glitchTimer-=dt;
+    if(this.horror && this.glitchTimer<=0){ this.g.effects.glitch(); this.g.audio.staticBurst(0.05); this.glitchTimer=2+Math.random()*4; }
     this.chatTimer+=dt;
     if(this.chatIndex < this.chat.length-1 && this.chatIndex!==2 && this.chatTimer>10){
       this.chatTimer=0; this.chatIndex++; this.dialog.show(this.chat[this.chatIndex]);
@@ -94,10 +108,14 @@ export class State_ROOM{
     if(this.shakeTimer>0) this.g.effects.shake(this.shakeTimer*5);
     this.room.draw(); this.cat.draw(c);
     this.dialog.draw();
+    if(this.jsActive>0){
+      this.g.effects.glitch(); c.fillStyle='#900'; c.fillRect(0,0,c.canvas.width,c.canvas.height);
+      c.fillStyle='#FFF'; c.font='20px monospace'; c.fillText(this.jsMsg,80,90);
+    }
     if(this.overlay>0){
       this.overlay-=1/60;
       c.fillStyle='#800'; c.fillRect(0,0,c.canvas.width,c.canvas.height);
-      c.fillStyle='#FFF'; c.font='14px monospace'; c.fillText('I wonder where you are...',40,80);
+      c.fillStyle='#FFF'; c.font='14px monospace'; c.fillText("YOU CAN'T RUN",40,80);
     }
     if(this.kill){
       const radius=20+this.killTimer*120;

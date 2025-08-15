@@ -29,6 +29,8 @@ export class EffectsController{
   _fade(alpha,dur){ const c=this.renderer.ctx; c.save(); c.globalAlpha=alpha; c.fillStyle='#FFF'; c.fillRect(0,0,this.renderer.w,this.renderer.h); c.restore(); /* simple fade impression via longer frame */ }
   /** Screen shake intensity mapped to mode */
   shake(intensity=1){ /* visual hint only: translate context */ const c=this.renderer.ctx; const k = this.mode==='extreme'?2: (this.mode==='reduced'?0.5:1); c.translate((Math.random()-0.5)*k*intensity,(Math.random()-0.5)*k*intensity); }
+  /** Glitch slices and noisy pixels */
+  glitch(){ const c=this.renderer.ctx; const w=this.renderer.w, h=this.renderer.h; for(let i=0;i<6;i++){ const sy=Math.random()*h; const sh=4+Math.random()*8; c.drawImage(c.canvas,0,sy,w,sh,(Math.random()-0.5)*8,sy+(Math.random()-0.5)*4,w,sh); } for(let i=0;i<30;i++){ c.fillStyle=`rgba(${Math.floor(Math.random()*256)},${Math.floor(Math.random()*256)},${Math.floor(Math.random()*256)},0.2)`; c.fillRect(Math.random()*w,Math.random()*h,1,1); } }
   /** True if jumpscare allowed based on cooldown */
   canJumpscare(){ const gap = this.mode==='extreme'?12:20; return (performance.now()/1000 - this.lastJumpscare) > gap; }
   markJumpscare(){ this.lastJumpscare = performance.now()/1000; }

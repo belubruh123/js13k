@@ -24,7 +24,7 @@ All flashes and shake route through `EffectsController`:
 Audio: Master gain ≤ 0.6, master limiter engaged. Mute/Volume available on WARNING and TITLE.
 
 ## TITLE_B “zzz” Noise
-Implemented in `AudioEngine.zzz()`. It’s a filtered-noise loop with light waveshaping. It ducks naturally because UI blips are short and the bed is low gain. Starts on TITLE_B enter, stops on exit.
+Implemented in `AudioEngine.zzz()`. It’s a filtered-noise loop with light waveshaping. It ducks naturally because UI blips are short and the bed is low gain. Starts on TITLE_B enter, stops on exit. The cursed 666 menu now also spins up a low sawtooth **buzz** for extra unsettling ambience.
 
 ## Notes
 - BOOT flashes a ⚠️ warning before the options screen.
@@ -32,4 +32,8 @@ Implemented in `AudioEngine.zzz()`. It’s a filtered-noise loop with light wave
 - Color picker flashes a full red screen after three failed picks before forcing Black.
 - In the room the cat grows curious about reality for 60 s; once it wonders about escape the scene turns hostile and a door and Exit button appear. Choosing either crashes the game.
 - Clicking the cat 13 times splatters blood, triggers a jump scare, and shows “I WILL FIND YOU AGAIN.”
+- Random surprise jump scares may now strike in the room even if you behave.
+- Jump scare taunts now randomly whisper "YOU'RE TOO SLOW" and "I AM GOD" during gameplay.
+- EVENTS/LORE scene cycles creepy lines like "HELLO AGAIN..." and "RUN RUN RUN".
+- Glitch horror: random static bursts, screen slice glitches, and "I SEE YOU" overlays escalate the creepypasta vibe.
 - LocalStorage: seed and run history stored under `pps_*` keys.
