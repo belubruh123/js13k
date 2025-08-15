@@ -32,6 +32,7 @@ export class State_ROOM{
     this.kill=false; this.killTimer=0;
     this.horror=false; this.overlay=0;
     this.shakeTimer=0;
+    this.softlock=false;
   }
   enter(){
     this.t=0; this.chatIndex=0; this.chatTimer=0; this.dialog.show(this.chat[0]);
@@ -40,35 +41,51 @@ export class State_ROOM{
     this.room.setDoor(0); this.room.setHorror(false);
     this.g.audio.grains();
     this.g.audio.purr(true);
+    this.softlock=false;
   }
   exit(){ this.g.audio.stopBed('grains'); this.g.audio.purr(false); }
   update(dt){
     this.g.effects.tick(dt);
     if(this.shakeTimer>0) this.shakeTimer=Math.max(0,this.shakeTimer-dt);
-    if(!this.kill) this.cat.tick(dt);
+    if(!this.kill && !this.softlock) this.cat.tick(dt);
     this.t+=dt;
-    if(!this.kill){
-      this.chatTimer+=dt;
-      if(this.chatIndex < this.chat.length-1 && this.chatTimer>10){
-        this.chatTimer=0; this.chatIndex++; this.dialog.show(this.chat[this.chatIndex]);
-        if(this.chatIndex===this.chat.length-1) this._beginHorror();
+    if(this.kill){
+      if(!this.softlock) this.killTimer+=dt;
+      if(this.killTimer>1 && !this.softlock){
+        this._softlock('You killed the cat.');
+        this.g.audio.sting(1.2);
       }
-      if(this.t>55 && this.chatIndex<this.chat.length-1){
-        this.chatIndex=this.chat.length-1; this.dialog.show(this.chat[this.chatIndex]);
-        this._beginHorror();
-      }
+      return;
+    }
+    if(this.softlock) return;
+    this.chatTimer+=dt;
+    if(this.chatIndex < this.chat.length-1 && this.chatIndex!==2 && this.chatTimer>10){
+      this.chatTimer=0; this.chatIndex++; this.dialog.show(this.chat[this.chatIndex]);
+      if(this.chatIndex===this.chat.length-1) this._beginHorror();
+    }
+    if(this.chatIndex===2 && this._hot(10,130,220,24) && this._click()){
+      this.chatTimer=0; this.chatIndex++; this.dialog.show(this.chat[this.chatIndex]);
+      this.g.audio.blip(400,0.05);
+    }
+    if(this.t>55 && this.chatIndex<this.chat.length-1){
+      this.chatIndex=this.chat.length-1; this.dialog.show(this.chat[this.chatIndex]);
+      this._beginHorror();
+    }
 
-      if(this._hot(this.cat.x-10, this.cat.y-40,60,60) && this._click()){
-        this.catClicks++;
-        if(this.catClicks>=13){
-          this.kill=true; this.cat.dead=true; this.dialog.hide(); this.killTimer=0;
-          if(this.g.effects.canJumpscare()){ this.g.effects.markJumpscare(); this.g.effects.flash(); this.shakeTimer=1; }
-          this.g.audio.sting(1.2);
-        }
+    if(this._hot(this.cat.x-10, this.cat.y-40,60,60) && this._click()){
+      this.catClicks++;
+      if(this.catClicks>=13){
+        this.kill=true; this.cat.dead=true; this.dialog.hide(); this.killTimer=0;
+        if(this.g.effects.canJumpscare()){ this.g.effects.markJumpscare(); this.g.effects.flash(); this.shakeTimer=1; }
+        this.g.audio.sting(1.2);
       }
-    }else{
-      this.killTimer+=dt;
-      if(this.killTimer>1){ this.g.goto('ENDINGS', {good:true, msg:'I WILL FIND YOU AGAIN'}); }
+    }
+
+    if(this.cat.happy<=0 || this.cat.full<=0 || this.cat.play<=0){
+      this.cat.dead=true;
+      this._softlock('Your cat has died.');
+      this.g.audio.sting(0.8);
+      return;
     }
   }
   render(){
@@ -89,16 +106,20 @@ export class State_ROOM{
     }
 
     if(!this.kill){
-      if(this.ui.button(10,4,70,24,'Feed')){ this.cat.feed(); this.g.audio.blip(500,0.05); }
-      if(this.ui.button(90,4,70,24,'Pet')){ this.cat.pet(); this.g.audio.blip(600,0.05); }
-      if(this.ui.button(170,4,70,24,'Toy')){ this.cat.toy(); this.g.audio.blip(700,0.05); }
+      if(!this.softlock){
+        if(this.ui.button(10,4,70,24,'Feed')){ this.cat.feed(); this.g.audio.blip(500,0.05); }
+        if(this.ui.button(90,4,70,24,'Pet')){ this.cat.pet(); this.g.audio.blip(600,0.05); }
+        if(this.ui.button(170,4,70,24,'Toy')){ this.cat.toy(); this.g.audio.blip(700,0.05); }
+      }
       this._bar(10,34,'Happy',this.cat.happy);
       this._bar(10,46,'Full',this.cat.full);
       this._bar(10,58,'Play',this.cat.play);
-      c.fillStyle='#BBB'; c.font='10px monospace'; c.fillText('Use buttons to care for your cat.',10,170);
-      if(this.horror){
-        if(this.ui.button(240,4,60,24,'Exit')){ this.g.goto('ENDINGS',{good:false}); }
-        if(this._hot(260,60,20,60) && this._click()){ this.g.goto('ENDINGS',{good:false}); }
+      if(!this.softlock){
+        c.fillStyle='#BBB'; c.font='10px monospace'; c.fillText('Use buttons to care for your cat.',10,170);
+        if(this.horror){
+          if(this.ui.button(240,4,60,24,'Exit')){ this._softlock('There is no escape.'); this.g.audio.hiss(0.6); }
+          if(this._hot(260,60,20,60) && this._click()){ this._softlock('The door is locked.'); this.g.audio.hiss(0.6); }
+        }
       }
     }
     r.end();
@@ -115,6 +136,12 @@ export class State_ROOM{
     this.dialog.setCorrupt(true);
     this.g.effects.flash();
     this.g.audio.hiss(0.6);
+  }
+  _softlock(msg){
+    this.dialog.show(msg);
+    this.softlock=true;
+    this.g.audio.stopBed('grains');
+    this.g.audio.purr(false);
   }
 }
 

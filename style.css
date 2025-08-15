@@ -7,10 +7,15 @@ body {
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  background: radial-gradient(circle at center, #222, #000);
+  font-family: system-ui, sans-serif;
+  color: #ccc;
 }
 #game {
   outline: none;
   cursor: crosshair;
   background: #000;
   image-rendering: pixelated;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.8);
 }

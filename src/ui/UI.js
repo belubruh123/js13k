@@ -10,8 +10,18 @@ export class UI{
   button(x,y,w,h,label){
     const ho=this.mx>=x&&this.mx<=x+w&&this.my>=y&&this.my<=y+h;
     const c=this.ctx; c.save();
-    c.fillStyle = ho ? (this.down? '#668':'#446') : '#223';
+    const grad=c.createLinearGradient(0,y,0,y+h);
+    if(ho){
+      if(this.down){ grad.addColorStop(0,'#556'); grad.addColorStop(1,'#334'); }
+      else{ grad.addColorStop(0,'#667'); grad.addColorStop(1,'#445'); }
+    }else{
+      grad.addColorStop(0,'#334'); grad.addColorStop(1,'#223');
+    }
+    c.shadowColor='rgba(0,0,0,0.6)';
+    c.shadowBlur=4; c.shadowOffsetY=2;
+    c.fillStyle=grad;
     c.fillRect(x,y,w,h);
+    c.shadowBlur=0; c.shadowOffsetY=0;
     c.strokeStyle='#FFF';
     c.lineWidth=2; c.strokeRect(x+0.5,y+0.5,w-1,h-1);
     c.fillStyle='#FFF';
