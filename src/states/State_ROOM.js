@@ -36,6 +36,7 @@ export class State_ROOM{
     this.jsMsgs=['I SEE YOU',"YOU'RE TOO SLOW",'I AM GOD'];
     this.softlock=false;
     this.glitchTimer=0;
+    this.doorSequence=false; this.doorTimer=0; this._closed=false;
   }
   enter(){
     this.t=0; this.chatIndex=0; this.chatTimer=0; this.dialog.show(this.chat[0]);
@@ -46,12 +47,13 @@ export class State_ROOM{
     this.g.audio.purr(true);
     this.jsTimer=5+Math.random()*10; this.jsActive=0; this.jsMsg='';
     this.softlock=false; this.glitchTimer=3+Math.random()*4;
+    this.doorSequence=false; this.doorTimer=0; this._closed=false;
   }
   exit(){ this.g.audio.stopBed('grains'); this.g.audio.purr(false); }
   update(dt){
     this.g.effects.tick(dt);
     if(this.shakeTimer>0) this.shakeTimer=Math.max(0,this.shakeTimer-dt);
-    if(!this.kill && !this.softlock) this.cat.tick(dt);
+    if(!this.kill && (!this.softlock || this.doorSequence)) this.cat.tick(dt);
     this.t+=dt;
     if(this.kill){
       if(!this.softlock) this.killTimer+=dt;
@@ -61,7 +63,13 @@ export class State_ROOM{
       }
       return;
     }
-    if(this.softlock) return;
+    if(this.softlock && !this.doorSequence) return;
+
+    if(this.doorSequence){
+      this.doorTimer+=dt;
+      this.cat.scale = 1 + Math.min(2, this.doorTimer);
+      if(this.doorTimer>4 && !this._closed){ this._closed=true; window.close(); }
+    }
     if(this.jsActive>0) this.jsActive=Math.max(0,this.jsActive-dt);
     this.jsTimer-=dt;
     if(this.jsTimer<=0 && this.g.effects.canJumpscare()){
@@ -117,6 +125,11 @@ export class State_ROOM{
       c.fillStyle='#800'; c.fillRect(0,0,c.canvas.width,c.canvas.height);
       c.fillStyle='#FFF'; c.font='14px monospace'; c.fillText("YOU CAN'T RUN",40,80);
     }
+    if(this.doorSequence && this.doorTimer>2){
+      c.fillStyle='rgba(255,0,0,0.9)';
+      c.fillRect(0,0,c.canvas.width,c.canvas.height);
+      c.fillStyle='#FFF'; c.font='30px monospace'; c.fillText('RUN',120,100);
+    }
     if(this.kill){
       const radius=20+this.killTimer*120;
       c.fillStyle='rgba(255,0,0,0.5)';
@@ -136,7 +149,7 @@ export class State_ROOM{
         c.fillStyle='#BBB'; c.font='10px monospace'; c.fillText('Use buttons to care for your cat.',10,170);
         if(this.horror){
           if(this.ui.button(240,4,60,24,'Exit')){ this._softlock('There is no escape.'); this.g.audio.hiss(0.6); }
-          if(this._hot(260,60,20,60) && this._click()){ this._softlock('The door is locked.'); this.g.audio.hiss(0.6); }
+          if(this._hot(260,60,20,60) && this._click()){ this._softlock('The door is locked.'); this.g.audio.hiss(0.6); this.doorSequence=true; this.doorTimer=0; this.cat.scale=1; }
         }
       }
     }
