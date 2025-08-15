@@ -2,10 +2,10 @@
 import { UI } from '../ui/UI.js';
 import { TextFX } from '../gfx/TextFX.js';
 export class State_TITLE_B{
-  constructor(g){ this.g=g; this.ui=new UI(g.renderer.ctx); this.fx=new TextFX(g.renderer.ctx); this.opts=false; }
-  enter(){ this.g.audio.zzz(true); }
-  exit(){ this.g.audio.zzz(false); }
-  update(dt){ this.fx.tick(dt); }
+  constructor(g){ this.g=g; this.ui=new UI(g.renderer.ctx); this.fx=new TextFX(g.renderer.ctx); this.opts=false; this.glt=0; }
+  enter(){ this.g.audio.zzz(true); this.g.audio.buzz(true); this.glt=0; }
+  exit(){ this.g.audio.zzz(false); this.g.audio.buzz(false); }
+  update(dt){ this.fx.tick(dt); this.glt=Math.max(0,this.glt-dt); }
   render(){
     const r=this.g.renderer;
     r.begin(); r.fill('#000');
@@ -39,5 +39,6 @@ export class State_TITLE_B{
     }
 
     r.end();
+    if(this.glt<=0){ this.g.effects.glitch(); this.glt=0.2+Math.random()*1.5; }
   }
 }
