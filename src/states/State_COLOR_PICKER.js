@@ -6,10 +6,26 @@ export class State_COLOR_PICKER{
     this.ui=new UI(g.renderer.ctx);
     this.msg='Pick your color';
     this.tries=0; // number of attempts to pick forbidden colours
+    this.noChoice=false; this.noChoiceTimer=0; // red-screen takeover
   }
-  update(dt){}
+  update(dt){
+    if(this.noChoice){
+      this.noChoiceTimer+=dt;
+      if(this.noChoiceTimer>1){
+        this.g.storage.set('color','Black');
+        this.g.goto('ROOM');
+      }
+    }
+  }
   render(){
-    const r=this.g.renderer; r.begin(); r.fill('#000');
+    const r=this.g.renderer; r.begin();
+    if(this.noChoice){
+      r.fill('#F00');
+      const c=r.ctx; c.fillStyle='#000'; c.font='16px monospace';
+      c.fillText('YOU GOT NO CHOICE', 40, 90);
+      r.end(); return;
+    }
+    r.fill('#000');
     const c=r.ctx; c.fillStyle='#EEE'; c.font='10px monospace'; c.fillText(this.msg, 80, 40);
     const cols=['Red','Green','Blue','Black'];
     cols.forEach((col,i)=>{
@@ -20,11 +36,8 @@ export class State_COLOR_PICKER{
           this.g.goto('ROOM');
         }else{
           this.tries++; this.g.audio.hiss(0.1);
-          this.msg = this.tries>=3 ? 'You have no choice.' : "You can't choose this color.";
-          if(this.tries>=3){
-            this.g.storage.set('color','Black');
-            this.g.goto('ROOM');
-          }
+          this.msg = "You can't choose this color.";
+          if(this.tries>=3){ this.noChoice=true; this.noChoiceTimer=0; }
         }
       }
     });

@@ -10,6 +10,12 @@ export class State_TITLE_B{
     const r=this.g.renderer;
     r.begin(); r.fill('#000');
     const c=r.ctx;
+    // noisy background
+    for(let i=0;i<1500;i++){
+      const n=Math.floor(Math.random()*255);
+      c.fillStyle=`rgb(${n},${n},${n})`;
+      c.fillRect(Math.random()*c.canvas.width,Math.random()*c.canvas.height,1,1);
+    }
     this.fx.draw('PET SIMULATOR?', 70, 40, '#F22', 2);
     c.fillStyle='#700'; c.fillRect(110,58,3,3); c.fillRect(120,60,2,2); // crude blood drip vibes
 

@@ -15,12 +15,12 @@ export class Room{
       c.fillStyle='#300'; c.fillRect(0,0,c.canvas.width,c.canvas.height);
       c.fillStyle='#400'; c.fillRect(0,120,c.canvas.width,60);
     }else{
-      // Normal dim room
-      c.fillStyle='#121212'; c.fillRect(0,0,c.canvas.width,c.canvas.height);
-      c.fillStyle='#0A0A0A'; c.fillRect(0,120,c.canvas.width,60);
+      // Friendly brightly lit room for the first 13 seconds
+      c.fillStyle='#CDE'; c.fillRect(0,0,c.canvas.width,c.canvas.height);
+      c.fillStyle='#EEE'; c.fillRect(0,120,c.canvas.width,60);
     }
     // door
-    if(this.door>0){ const x=260, y=60; const w=20, h=60; c.fillStyle=this.horror?'#400':'#111'; c.fillRect(x,y,w,h); c.strokeStyle=`rgba(180,0,0,${this.door})`; c.strokeRect(x+0.5,y+0.5,w-1,h-1); }
+    if(this.door>0){ const x=260, y=60; const w=20, h=60; c.fillStyle=this.horror?'#400':'#654321'; c.fillRect(x,y,w,h); c.strokeStyle=`rgba(180,0,0,${this.door})`; c.strokeRect(x+0.5,y+0.5,w-1,h-1); }
     // scanlines
     const tint=this.horror?'rgba(255,0,0,0.1)':'rgba(255,0,0,0.02)';
     c.fillStyle=tint; for(let y=0;y<c.canvas.height;y+=2){ c.fillRect(0,y,c.canvas.width,1);} }

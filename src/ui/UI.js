@@ -10,12 +10,12 @@ export class UI{
   button(x,y,w,h,label){
     const ho=this.mx>=x&&this.mx<=x+w&&this.my>=y&&this.my<=y+h;
     const c=this.ctx; c.save();
-    c.fillStyle = ho ? (this.down? '#555':'#333') : '#111';
+    c.fillStyle = ho ? (this.down? '#668':'#446') : '#223';
     c.fillRect(x,y,w,h);
     c.strokeStyle='#FFF';
-    c.strokeRect(x+0.5,y+0.5,w-1,h-1);
-    c.fillStyle='#DDD';
-    c.font='10px monospace';
+    c.lineWidth=2; c.strokeRect(x+0.5,y+0.5,w-1,h-1);
+    c.fillStyle='#FFF';
+    c.font='12px monospace';
     c.textBaseline='middle';
     c.textAlign='center';
     c.fillText(label, x+w/2, y+h/2);
