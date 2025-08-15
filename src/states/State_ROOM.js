@@ -31,6 +31,7 @@ export class State_ROOM{
     this.catClicks=0;
     this.kill=false; this.killTimer=0;
     this.horror=false; this.overlay=0;
+    this.shakeTimer=0;
   }
   enter(){
     this.t=0; this.chatIndex=0; this.chatTimer=0; this.dialog.show(this.chat[0]);
@@ -43,6 +44,7 @@ export class State_ROOM{
   exit(){ this.g.audio.stopBed('grains'); this.g.audio.purr(false); }
   update(dt){
     this.g.effects.tick(dt);
+    if(this.shakeTimer>0) this.shakeTimer=Math.max(0,this.shakeTimer-dt);
     if(!this.kill) this.cat.tick(dt);
     this.t+=dt;
     if(!this.kill){
@@ -60,6 +62,8 @@ export class State_ROOM{
         this.catClicks++;
         if(this.catClicks>=13){
           this.kill=true; this.cat.dead=true; this.dialog.hide(); this.killTimer=0;
+          if(this.g.effects.canJumpscare()){ this.g.effects.markJumpscare(); this.g.effects.flash(); this.shakeTimer=1; }
+          this.g.audio.sting(1.2);
         }
       }
     }else{
@@ -69,7 +73,9 @@ export class State_ROOM{
   }
   render(){
     const r=this.g.renderer; const c=r.ctx;
-    r.begin(); this.room.draw(); this.cat.draw(c);
+    r.begin();
+    if(this.shakeTimer>0) this.g.effects.shake(this.shakeTimer*5);
+    this.room.draw(); this.cat.draw(c);
     this.dialog.draw();
     if(this.overlay>0){
       this.overlay-=1/60;
@@ -107,6 +113,8 @@ export class State_ROOM{
     this.room.setHorror(true);
     this.room.setDoor(1);
     this.dialog.setCorrupt(true);
+    this.g.effects.flash();
+    this.g.audio.hiss(0.6);
   }
 }
 
