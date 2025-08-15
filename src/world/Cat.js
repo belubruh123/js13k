@@ -2,8 +2,9 @@
  * @module world/Cat
  * Simple black cat sprite and basic needs; responds to pet/feed/toy.
  */
+import { CONST } from '../util/constants.js';
 export class Cat{
-  constructor(){ this.x=100; this.y=110; this.happy=0.5; this.full=0.5; this.play=0.5; this.lookAt=false; this.purr=false; }
+  constructor(){ this.x=(CONST.WIDTH-20)/2; this.y=(CONST.HEIGHT/2)+10; this.happy=0.5; this.full=0.5; this.play=0.5; this.lookAt=false; this.purr=false; }
   tick(dt){ this.happy = Math.max(0,Math.min(1,this.happy - dt*0.01)); this.full = Math.max(0,Math.min(1,this.full - dt*0.02)); this.play = Math.max(0,Math.min(1,this.play - dt*0.015)); }
   draw(ctx){ ctx.save(); ctx.fillStyle='#000'; // body
     ctx.fillRect(this.x, this.y-8, 20, 10); // body
