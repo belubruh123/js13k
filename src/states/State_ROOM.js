@@ -37,15 +37,15 @@ export class State_ROOM{
     if(this.glitch>0.8){ this.room.setDoor(1); }
     else if(this.glitch>0.4){ this.room.setDoor(0.6); }
 
-    // Trigger horror mode after 30 seconds
-    if(!this.horror && this.startTime>30){
-      this.horror=true;
-      this.room.setHorror(true);
-      this.cat.horror=true;
-      this.dialog.setCorrupt(true);
-      this.dialog.show('You cannot leave.');
-      this.horrorOverlay=0;
-    }
+      // Trigger horror mode after 13 seconds
+      if(!this.horror && this.startTime>13){
+        this.horror=true;
+        this.room.setHorror(true);
+        this.cat.horror=true;
+        this.dialog.setCorrupt(true);
+        this.dialog.show('You cannot leave.');
+        this.horrorOverlay=0;
+      }
 
     // Tutorial chat progression
     if(this.chatIndex<this.chat.length){
