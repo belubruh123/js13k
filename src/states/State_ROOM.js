@@ -4,6 +4,7 @@ import { Cat } from '../world/Cat.js';
 import { UI } from '../ui/UI.js';
 import { DialogBox } from '../ui/DialogBox.js';
 
+
 /**
  * Main gameplay room.  Starts friendly for a full minute while the cat grows
  * curious about reality.  After it muses about escape the scene shifts to
@@ -44,7 +45,6 @@ export class State_ROOM{
     this.g.effects.tick(dt);
     if(!this.kill) this.cat.tick(dt);
     this.t+=dt;
-
     if(!this.kill){
       this.chatTimer+=dt;
       if(this.chatIndex < this.chat.length-1 && this.chatTimer>10){
