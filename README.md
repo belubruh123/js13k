@@ -28,8 +28,8 @@ Implemented in `AudioEngine.zzz()`. It’s a filtered-noise loop with light wave
 
 ## Notes
 - BOOT flashes a ⚠️ warning before the options screen.
-- Friendly title screen briefly pleads “LET ME OUT” before cutting to the noisy © 666 menu.
+- Friendly title screen shows a calm “Pet Simulator” splash with © 2025 js13kGames before briefly pleading “LET ME OUT” and cutting to the noisy © 666 menu.
 - Color picker flashes a full red screen after three failed picks before forcing Black.
 - In the room the cat grows curious about reality for 60 s; once it wonders about escape the scene turns hostile and a door and Exit button appear. Choosing either crashes the game.
-- Clicking the cat 13 times splatters blood and shows “I WILL FIND YOU AGAIN.”
+- Clicking the cat 13 times splatters blood, triggers a jump scare, and shows “I WILL FIND YOU AGAIN.”
 - LocalStorage: seed and run history stored under `pps_*` keys.

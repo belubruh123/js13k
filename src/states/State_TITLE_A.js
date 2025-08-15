@@ -18,6 +18,9 @@ export class State_TITLE_A{
       c.fillStyle='#F33'; c.font='16px monospace';
       c.fillText('LET ME OUT', 70, 90);
     }
+    // Friendly credit before the sinister 666 screen appears.
+    c.fillStyle='#444'; c.font='10px monospace';
+    c.fillText('© 2025 js13kGames', 4, 170);
     r.end();
   }
 }
