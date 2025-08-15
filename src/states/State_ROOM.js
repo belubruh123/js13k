@@ -7,10 +7,10 @@ import { DialogBox } from '../ui/DialogBox.js';
 
 /**
  * Main gameplay room.  Starts friendly for a full minute while the cat grows
- * curious about reality.  Clicking the cat thirteen times triggers the "good"
- * ending; otherwise it escapes after sixty seconds and crashes the game.
+ * curious about reality.  After it muses about escape the scene shifts to
+ * horror, revealing a door and Exit button.  Clicking either crashes the game,
+ * while clicking the cat thirteen times triggers the secret "good" ending.
  */
-
 export class State_ROOM{
   constructor(g){
     this.g=g;
@@ -30,10 +30,13 @@ export class State_ROOM{
     this.chatIndex=0; this.chatTimer=0;
     this.catClicks=0;
     this.kill=false; this.killTimer=0;
+    this.horror=false; this.overlay=0;
   }
   enter(){
     this.t=0; this.chatIndex=0; this.chatTimer=0; this.dialog.show(this.chat[0]);
     this.cat.dead=false; this.catClicks=0; this.kill=false; this.killTimer=0;
+    this.horror=false; this.overlay=0; this.dialog.setCorrupt(false);
+    this.room.setDoor(0); this.room.setHorror(false);
     this.g.audio.grains();
     this.g.audio.purr(true);
   }
@@ -46,11 +49,12 @@ export class State_ROOM{
       this.chatTimer+=dt;
       if(this.chatIndex < this.chat.length-1 && this.chatTimer>10){
         this.chatTimer=0; this.chatIndex++; this.dialog.show(this.chat[this.chatIndex]);
+        if(this.chatIndex===this.chat.length-1) this._beginHorror();
       }
       if(this.t>55 && this.chatIndex<this.chat.length-1){
         this.chatIndex=this.chat.length-1; this.dialog.show(this.chat[this.chatIndex]);
+        this._beginHorror();
       }
-      if(this.t>60){ this.g.goto('ENDINGS', {good:false}); }
 
       if(this._hot(this.cat.x-10, this.cat.y-40,60,60) && this._click()){
         this.catClicks++;
@@ -62,13 +66,16 @@ export class State_ROOM{
       this.killTimer+=dt;
       if(this.killTimer>1){ this.g.goto('ENDINGS', {good:true, msg:'I WILL FIND YOU AGAIN'}); }
     }
-
-    if(this.horror && this.horrorOverlay<1){ this.horrorOverlay+=dt; }
   }
   render(){
     const r=this.g.renderer; const c=r.ctx;
     r.begin(); this.room.draw(); this.cat.draw(c);
     this.dialog.draw();
+    if(this.overlay>0){
+      this.overlay-=1/60;
+      c.fillStyle='#800'; c.fillRect(0,0,c.canvas.width,c.canvas.height);
+      c.fillStyle='#FFF'; c.font='14px monospace'; c.fillText('I wonder where you are...',40,80);
+    }
     if(this.kill){
       const radius=20+this.killTimer*120;
       c.fillStyle='rgba(255,0,0,0.5)';
@@ -83,11 +90,23 @@ export class State_ROOM{
       this._bar(10,46,'Full',this.cat.full);
       this._bar(10,58,'Play',this.cat.play);
       c.fillStyle='#BBB'; c.font='10px monospace'; c.fillText('Use buttons to care for your cat.',10,170);
+      if(this.horror){
+        if(this.ui.button(240,4,60,24,'Exit')){ this.g.goto('ENDINGS',{good:false}); }
+        if(this._hot(260,60,20,60) && this._click()){ this.g.goto('ENDINGS',{good:false}); }
+      }
     }
     r.end();
   }
   _hot(x,y,w,h){ const i=this.g.input; return i.mx>=x&&i.mx<=x+w&&i.my>=y&&i.my<=y+h; }
   _click(){ if(this.g.input.click){ this.g.input.click=false; return true; } return false; }
   _bar(x,y,label,val){ const c=this.g.renderer.ctx; c.fillStyle='#111'; c.fillRect(x,y,80,6); c.fillStyle='#0A0'; c.fillRect(x,y,80*val,6); c.fillStyle='#AAA'; c.font='8px monospace'; c.fillText(label, x+85, y-1); }
+  _beginHorror(){
+    if(this.horror) return;
+    this.horror=true;
+    this.overlay=1;
+    this.room.setHorror(true);
+    this.room.setDoor(1);
+    this.dialog.setCorrupt(true);
+  }
 }
 
