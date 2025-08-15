@@ -13,10 +13,15 @@ export class Cat{
     this.happy=0.5; this.full=0.5; this.play=0.5;
     this.lookAt=false; this.purr=false;
     this.dead=false;
+    this.scale=1;
   }
   tick(dt){ if(this.dead) return; this.happy = Math.max(0,Math.min(1,this.happy - dt*0.01)); this.full = Math.max(0,Math.min(1,this.full - dt*0.02)); this.play = Math.max(0,Math.min(1,this.play - dt*0.015)); }
   draw(ctx){
     ctx.save();
+    const cx=this.x+20, cy=this.y-10;
+    ctx.translate(cx,cy);
+    ctx.scale(this.scale,this.scale);
+    ctx.translate(-cx,-cy);
     if(this.dead){
       ctx.fillStyle='#500';
       ctx.fillRect(this.x-10, this.y-20, 60, 30); // blood pool
