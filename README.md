@@ -28,5 +28,7 @@ Implemented in `AudioEngine.zzz()`. It’s a filtered-noise loop with light wave
 
 ## Notes
 - Color picker flashes a full red screen after three failed picks before forcing Black and proceeding.
+
 - Room gradually grows uneasy and the door emerges; at least two endings (escape vs. other text variant).
+
 - LocalStorage: seed and run history stored under `pps_*` keys.
