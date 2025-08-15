@@ -12,7 +12,7 @@ Open `/index.html` in a modern browser. No build tools needed.
 - `/src/audio/*` – Web Audio synth engine + master Limiter.
 - `/src/ui/UI.js` – Minimal canvas UI.
 - `/src/world/*` – Room and Cat.
-- `/src/states/*` – BOOT → WARNING → TITLE_A → GLITCH_FLASH → TITLE_B → COLOR_PICKER → ROOM → EVENTS/LORE → ENDINGS.
+- `/src/states/*` – BOOT → WARNING → TITLE_A → TITLE_B → COLOR_PICKER → ROOM → EVENTS/LORE → ENDINGS.
 - `/src/util/*` – input, constants, storage.
 
 ## Safety Caps & Modes
@@ -27,6 +27,9 @@ Audio: Master gain ≤ 0.6, master limiter engaged. Mute/Volume available on WAR
 Implemented in `AudioEngine.zzz()`. It’s a filtered-noise loop with light waveshaping. It ducks naturally because UI blips are short and the bed is low gain. Starts on TITLE_B enter, stops on exit.
 
 ## Notes
-- Color picker forces Black after 3 "Choose Again" prompts ("YOU HAVE NO CHOICE.") then proceeds.
-- Room has escalating glitch meter, door emergence, at least two endings (escape vs. other text variant).
+- BOOT flashes a ⚠️ warning before the options screen.
+- Friendly title screen briefly pleads “LET ME OUT” before cutting to the noisy © 666 menu.
+- Color picker flashes a full red screen after three failed picks before forcing Black.
+- In the room the cat grows curious about reality for 60 s; if left alone it escapes and the game crashes.
+- Clicking the cat 13 times splatters blood and shows “I WILL FIND YOU AGAIN.”
 - LocalStorage: seed and run history stored under `pps_*` keys.
