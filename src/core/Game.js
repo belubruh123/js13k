@@ -6,7 +6,6 @@
 import { State_BOOT } from '../states/State_BOOT.js';
 import { State_WARNING } from '../states/State_WARNING.js';
 import { State_TITLE_A } from '../states/State_TITLE_A.js';
-import { State_GLITCH_FLASH } from '../states/State_GLITCH_FLASH.js';
 import { State_TITLE_B } from '../states/State_TITLE_B.js';
 import { State_COLOR_PICKER } from '../states/State_COLOR_PICKER.js';
 import { State_ROOM } from '../states/State_ROOM.js';
@@ -43,7 +42,6 @@ export class Game {
       BOOT: new State_BOOT(this),
       WARNING: new State_WARNING(this),
       TITLE_A: new State_TITLE_A(this),
-      GLITCH_FLASH: new State_GLITCH_FLASH(this),
       TITLE_B: new State_TITLE_B(this),
       COLOR_PICKER: new State_COLOR_PICKER(this),
       ROOM: new State_ROOM(this),

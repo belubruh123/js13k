@@ -5,11 +5,10 @@
 import { CONST } from '../util/constants.js';
 export class Cat{
   constructor(){
-    // Place the cat exactly in the middle of the canvas.  The sprite is
-    // roughly 20x14 so we offset by half its size to keep it visually centred
-    // similar to the classic "Tom Cat" layout.
-    this.x = (CONST.WIDTH-20)/2;
-    this.y = (CONST.HEIGHT/2)+5; // centre vertically (y-5 is sprite centre)
+    // Place the cat roughly in the middle of the canvas.  The new sprite is
+    // much larger (~40x28) so the offsets are adjusted to keep it centred.
+    this.x = (CONST.WIDTH-40)/2;
+    this.y = (CONST.HEIGHT/2)+10; // centre vertically
 
     this.happy=0.5; this.full=0.5; this.play=0.5;
     this.lookAt=false; this.purr=false;
@@ -21,21 +20,21 @@ export class Cat{
     if(this.horror){
       // Distorted/bloody variant used after the 13 second twist
       ctx.fillStyle='#600';
-      ctx.fillRect(this.x-2, this.y-10, 24, 14); // swollen body
+      ctx.fillRect(this.x-4, this.y-20, 48, 28); // swollen body
       ctx.fillStyle='#900';
-      ctx.fillRect(this.x+10, this.y-16, 12, 8); // grotesque head
+      ctx.fillRect(this.x+20, this.y-32, 20, 16); // grotesque head
       ctx.fillStyle='#FFF';
-      ctx.fillRect(this.x+12, this.y-14, 2,2); ctx.fillRect(this.x+16, this.y-14, 2,2);
+      ctx.fillRect(this.x+24, this.y-28, 4,4); ctx.fillRect(this.x+32, this.y-28, 4,4);
     }else{
       ctx.fillStyle='#000'; // body
-      ctx.fillRect(this.x, this.y-8, 20, 10); // body
-      ctx.fillRect(this.x+14, this.y-12, 6, 6); // head
+      ctx.fillRect(this.x, this.y-16, 40, 20); // body
+      ctx.fillRect(this.x+28, this.y-32, 12, 12); // head
       // eyes
       ctx.fillStyle=this.lookAt?'#F33':'#444';
-      ctx.fillRect(this.x+16, this.y-11, 1,1); ctx.fillRect(this.x+18, this.y-11, 1,1);
+      ctx.fillRect(this.x+32, this.y-28, 3,3); ctx.fillRect(this.x+36, this.y-28, 3,3);
       // tail sway
-      const t = Math.sin(performance.now()*0.004)*3;
-      ctx.fillStyle='#000'; ctx.fillRect(this.x-3, this.y-7+t, 4, 2);
+      const t = Math.sin(performance.now()*0.004)*5;
+      ctx.fillStyle='#000'; ctx.fillRect(this.x-6, this.y-14+t, 6, 4);
     }
     ctx.restore();
   }

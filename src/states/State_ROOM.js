@@ -13,8 +13,8 @@ export class State_ROOM{
     this.glitch=0; this.petHold=0; this.lastAction=0;
     this.feedCount=0; this.petCount=0;
     this.startTime=0; this.horror=false; this.ending=false;
-    this.chat=['Hi! I\'m your cat.','Use Feed, Pet and Toy to care for me.'];
-    this.chatIndex=0; this.chatTimer=0;
+    this.chat=['Feed pet and play to keep it calm.'];
+    this.chatIndex=0; this.chatTimer=0; this.chatDur=1;
   }
   enter(){ this.g.audio.grains(); this.g.audio.purr(true); this.startTime=0; }
   exit(){ this.g.audio.stopBed('grains'); this.g.audio.purr(false); this.g.audio.hum(false); }
@@ -40,7 +40,7 @@ export class State_ROOM{
     // Tutorial chat progression
     if(this.chatIndex<this.chat.length){
       this.chatTimer+=dt;
-      if(this.chatTimer>3){ this.chatTimer=0; this.chatIndex++; }
+      if(this.chatTimer>this.chatDur){ this.chatIndex++; }
     }
   }
   render(){
@@ -60,7 +60,7 @@ export class State_ROOM{
       c.fillStyle='#FFF'; c.font='10px monospace'; c.fillText(msg, 50,154);
     }
 
-    r.vignette(0.7);
+    r.vignette(this.horror?0.7:0.3);
 
     if(this.ending){
       c.fillStyle='#000'; c.fillRect(0,0,c.canvas.width,c.canvas.height);
