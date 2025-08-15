@@ -12,19 +12,19 @@ export class Cat{
 
     this.happy=0.5; this.full=0.5; this.play=0.5;
     this.lookAt=false; this.purr=false;
-    this.horror=false; // switched on during the late game twist
+    this.dead=false;
   }
-  tick(dt){ this.happy = Math.max(0,Math.min(1,this.happy - dt*0.01)); this.full = Math.max(0,Math.min(1,this.full - dt*0.02)); this.play = Math.max(0,Math.min(1,this.play - dt*0.015)); }
+  tick(dt){ if(this.dead) return; this.happy = Math.max(0,Math.min(1,this.happy - dt*0.01)); this.full = Math.max(0,Math.min(1,this.full - dt*0.02)); this.play = Math.max(0,Math.min(1,this.play - dt*0.015)); }
   draw(ctx){
     ctx.save();
-    if(this.horror){
-      // Distorted/bloody variant used after the 13 second twist
-      ctx.fillStyle='#600';
-      ctx.fillRect(this.x-4, this.y-20, 48, 28); // swollen body
-      ctx.fillStyle='#900';
-      ctx.fillRect(this.x+20, this.y-32, 20, 16); // grotesque head
-      ctx.fillStyle='#FFF';
-      ctx.fillRect(this.x+24, this.y-28, 4,4); ctx.fillRect(this.x+32, this.y-28, 4,4);
+    if(this.dead){
+      ctx.fillStyle='#500';
+      ctx.fillRect(this.x-10, this.y-20, 60, 30); // blood pool
+      ctx.fillStyle='#000';
+      ctx.fillRect(this.x, this.y-16, 40, 20); // body
+      ctx.fillRect(this.x+28, this.y-32, 12, 12); // head
+      ctx.fillStyle='#F00';
+      ctx.fillRect(this.x+32, this.y-28, 3,3); ctx.fillRect(this.x+36, this.y-28, 3,3);
     }else{
       ctx.fillStyle='#000'; // body
       ctx.fillRect(this.x, this.y-16, 40, 20); // body

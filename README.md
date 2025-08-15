@@ -27,8 +27,9 @@ Audio: Master gain ≤ 0.6, master limiter engaged. Mute/Volume available on WAR
 Implemented in `AudioEngine.zzz()`. It’s a filtered-noise loop with light waveshaping. It ducks naturally because UI blips are short and the bed is low gain. Starts on TITLE_B enter, stops on exit.
 
 ## Notes
-- Color picker flashes a full red screen after three failed picks before forcing Black and proceeding.
-
-- Room gradually grows uneasy and the door emerges; at least two endings (escape vs. other text variant).
-
+- BOOT flashes a ⚠️ warning before the options screen.
+- Friendly title screen briefly pleads “LET ME OUT” before cutting to the noisy © 666 menu.
+- Color picker flashes a full red screen after three failed picks before forcing Black.
+- In the room the cat grows curious about reality for 60 s; if left alone it escapes and the game crashes.
+- Clicking the cat 13 times splatters blood and shows “I WILL FIND YOU AGAIN.”
 - LocalStorage: seed and run history stored under `pps_*` keys.

@@ -1,8 +1,7 @@
 /** @module states/State_BOOT */
 /**
- * Initial splash screen.  Shows a short instructional message for a brief
- * moment before continuing into the warning screen.  There is no user input
- * here; the message simply fades after one second.
+ * Initial splash screen. Shows a flashing warning for a brief moment
+ * before continuing into the warning/options screen.
  */
 export class State_BOOT{
   /** @param {import('../core/Game.js').Game} game */
@@ -10,9 +9,11 @@ export class State_BOOT{
   enter(){ this.t=0; }
   update(dt){ this.t+=dt; if(this.t>1){ this.g.goto('WARNING'); } }
   render(){
-    const r=this.g.renderer; r.begin(); r.fill('#CDE');
-    const c=r.ctx; c.fillStyle='#000'; c.font='12px monospace';
-    c.fillText('Feed, Pet and Play to keep it calm.', 20, 90);
+    const r=this.g.renderer; r.begin();
+    const flash = Math.floor(this.t*10)%2===0?'#F00':'#000';
+    r.fill(flash);
+    const c=r.ctx; c.fillStyle='#FFF'; c.font='14px monospace';
+    c.fillText('⚠️  WARNING', 80, 90);
     r.end();
   }
 }

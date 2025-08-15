@@ -68,6 +68,6 @@ export class Game {
     requestAnimationFrame((t)=>this.loop(t));
   }
 
-  /** Convenience: flow to next state by key name */
-  goto(key){ this.state.set(this.states[key]); }
+  /** Convenience: flow to next state by key name with optional data */
+  goto(key, data){ this.state.set(this.states[key], data); }
 }
