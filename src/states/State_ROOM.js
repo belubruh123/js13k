@@ -4,11 +4,13 @@ import { Cat } from '../world/Cat.js';
 import { UI } from '../ui/UI.js';
 import { DialogBox } from '../ui/DialogBox.js';
 
+
 /**
  * Main gameplay room.  Starts friendly for a full minute while the cat grows
  * curious about reality.  Clicking the cat thirteen times triggers the "good"
  * ending; otherwise it escapes after sixty seconds and crashes the game.
  */
+
 export class State_ROOM{
   constructor(g){
     this.g=g;
@@ -40,7 +42,6 @@ export class State_ROOM{
     this.g.effects.tick(dt);
     if(!this.kill) this.cat.tick(dt);
     this.t+=dt;
-
     if(!this.kill){
       this.chatTimer+=dt;
       if(this.chatIndex < this.chat.length-1 && this.chatTimer>10){
@@ -61,6 +62,8 @@ export class State_ROOM{
       this.killTimer+=dt;
       if(this.killTimer>1){ this.g.goto('ENDINGS', {good:true, msg:'I WILL FIND YOU AGAIN'}); }
     }
+
+    if(this.horror && this.horrorOverlay<1){ this.horrorOverlay+=dt; }
   }
   render(){
     const r=this.g.renderer; const c=r.ctx;
